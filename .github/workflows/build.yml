@@ -1,9 +1,9 @@
-name: Build and Deploy
+name: Build on Push
 
 on:
   push:
-    branches-ignore:
-      - master # Exclude the main branch
+    branches:
+      - main
 
 jobs:
   build:
@@ -11,77 +11,30 @@ jobs:
 
     steps:
       - name: Checkout Code
-
         uses: actions/checkout@v3
 
       - name: Set up Node.js
-
         uses: actions/setup-node@v3
-
         with:
-          node-version: "18"
+          node-version: "16" # Adjust this as needed
 
       - name: Install Dependencies
-
-        run: npm install
+        run: npm install # Use the appropriate package manager for your project
 
       - name: Build Project
-
-        run: npm run build
+        run: npm run build # Adjust this command based on your build process
 
       - name: Configure AWS CLI
-
         uses: aws-actions/configure-aws-credentials@v1
-
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-1
 
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Set Bucket Path
-
-        id: set-bucket-path
-
+      - name: Sync dist folder to S3 PORTAL
         run: |
+          aws s3 sync dist/ s3://webapps.sportzlytics.com/BMS/ --delete
 
-          branch_name="${GITHUB_REF##*/}"
-
-          if [[ "$branch_name" == "test" ]]; then
-
-            echo "bucket_path=${{ secrets.AWS_BUCKET_PATH_TEST }}" >> $GITHUB_ENV
-
-          elif [[ "$branch_name" == "main" ]]; then
-
-            echo "bucket_path=${{ secrets.AWS_BUCKET_PATH_DEV }}" >> $GITHUB_ENV
-
-          elif [[ "$branch_name" == "prod" ]]; then
-
-            echo "bucket_path=${{ secrets.AWS_BUCKET_PATH_PROD }}" >> $GITHUB_ENV
-
-          else
-
-            echo "Unknown branch: $branch_name. Exiting."
-
-            exit 1
-
-          fi
-
-      - name: Debug Bucket Path
-
+      - name: Upload ReleaseNotes.txt to S3 PORTAL
         run: |
-
-          echo "Bucket Path: '${{ env.bucket_path }}'"
-
-      - name: Sync dist folder to S3
-
-        run: |
-
-          aws s3 sync dist/ s3://${{ env.bucket_path }} --delete
-
-      - name: Upload ReleaseNotes.txt to S3
-
-        run: |
-
-          aws s3 cp ReleaseNotes.txt s3://${{ env.bucket_path }}ReleaseNotes.txt
+          aws s3 cp ReleaseNotes.txt s3://webapps.sportzlytics.com/BMS/ReleaseNotes.txt
