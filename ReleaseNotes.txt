@@ -1,0 +1,4 @@
+SPORTZLYTICS NEW RELEASE NOTES (v1.0.3)
+10/07/2025
+
+1) Provided and Implemented OnBoard Coach option through BMS.
