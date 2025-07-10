@@ -1,0 +1,47 @@
+[
+  {
+    "MenuName": "Dashboard",
+    "MenuRoute": "/dashboard",
+    "MenuIcon": "mdi-view-dashboard"
+  },
+  {
+    "MenuName": "Coaches",
+    "MenuRoute": "/coaches",
+    "MenuIcon": "mdi-hat-fedora"
+  },
+  {
+    "MenuName": "App Users",
+    "MenuRoute": "/app-users",
+    "MenuIcon": "mdi-crown-circle"
+  },
+  {
+    "MenuName": "Coaching Videos",
+    "MenuRoute": "/coaching-videos",
+    "MenuIcon": "mdi-video-box"
+  },
+  {
+    "MenuName": "Sports",
+    "MenuRoute": "/sports",
+    "MenuIcon": "mdi-soccer"
+  },
+  {
+    "MenuName": "Featured",
+    "MenuRoute": "/featured-ads",
+    "MenuIcon": "mdi-star-circle"
+  },
+  {
+    "MenuName": "Refund Requests",
+    "MenuRoute": "/refund-requests",
+    "MenuIcon": "mdi-cash"
+  },
+  {
+    "MenuName": "Admins",
+    "MenuRoute": "/all-admins",
+    "MenuIcon": "mdi-account-multiple"
+  },
+  {
+    "MenuName": "App Guide",
+    "MenuRoute": "/appguide",
+    "MenuIcon": "mdi-notebook"
+  }
+]

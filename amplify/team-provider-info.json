@@ -1,0 +1,41 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-sportzlyticsbms3-dev-03b0f-authRole",
+      "UnauthRoleArn": "arn:aws:iam::058264493142:role/amplify-sportzlyticsbms3-dev-03b0f-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::058264493142:role/amplify-sportzlyticsbms3-dev-03b0f-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-sportzlyticsbms3-dev-03b0f-deployment",
+      "UnauthRoleName": "amplify-sportzlyticsbms3-dev-03b0f-unauthRole",
+      "StackName": "amplify-sportzlyticsbms3-dev-03b0f",
+      "StackId": "arn:aws:cloudformation:us-east-1:058264493142:stack/amplify-sportzlyticsbms3-dev-03b0f/0e3ca780-21a2-11f0-86dd-0eb941e743af",
+      "AmplifyAppId": "d2radx2rh3lzuu"
+    }
+  },
+  "sportz": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-sportzlyticsbms3-sportz-7e887-authRole",
+      "UnauthRoleArn": "arn:aws:iam::058264493142:role/amplify-sportzlyticsbms3-sportz-7e887-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::058264493142:role/amplify-sportzlyticsbms3-sportz-7e887-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-sportzlyticsbms3-sportz-7e887-deployment",
+      "UnauthRoleName": "amplify-sportzlyticsbms3-sportz-7e887-unauthRole",
+      "StackName": "amplify-sportzlyticsbms3-sportz-7e887",
+      "StackId": "arn:aws:cloudformation:ap-south-1:058264493142:stack/amplify-sportzlyticsbms3-sportz-7e887/46bd58a0-2726-11f0-a18f-0a3b7a69a0b1",
+      "AmplifyAppId": "d13xiu2ju5jde2"
+    }
+  },
+  "sportlyy": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-sportzlyticsbms3-sportlyy-4434f-authRole",
+      "UnauthRoleArn": "arn:aws:iam::058264493142:role/amplify-sportzlyticsbms3-sportlyy-4434f-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::058264493142:role/amplify-sportzlyticsbms3-sportlyy-4434f-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-sportzlyticsbms3-sportlyy-4434f-deployment",
+      "UnauthRoleName": "amplify-sportzlyticsbms3-sportlyy-4434f-unauthRole",
+      "StackName": "amplify-sportzlyticsbms3-sportlyy-4434f",
+      "StackId": "arn:aws:cloudformation:us-east-1:058264493142:stack/amplify-sportzlyticsbms3-sportlyy-4434f/5d52b850-2729-11f0-8a64-0affd772fb61",
+      "AmplifyAppId": "d2radx2rh3lzuu"
+    }
+  }
+}
