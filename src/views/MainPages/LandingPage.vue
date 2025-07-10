@@ -16,7 +16,7 @@
                   <v-img src="@/assets/FinalLogo.png" :width="70" cover />
                 </div>
                 <div class="ml-2" style="font-size: 17px">
-                  <span><strong> v1.0.2 </strong></span>
+                  <span><strong> v1.0.3 </strong></span>
                 </div>
               </div>
             </v-toolbar-title>

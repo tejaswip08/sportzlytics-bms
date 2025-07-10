@@ -34,11 +34,7 @@
             ></v-progress-circular>
           </div>
           <div v-else>
-            <v-img
-              :src="profileImgURL"
-              :width="140"
-              style="border-radius: 100%; object-fit: cover"
-            />
+            <v-img :src="profileImgURL" :width="140" />
           </div>
         </div>
         <div>
@@ -385,28 +381,31 @@ export default {
         this.StoreObj.user_image_url
       );
     }, 2000);
-
-    this.StoreObj.certificates.map((item) => {
-      if (item) {
-        const fileName = item.split("/");
-        const obj = {
-          file_name: fileName[fileName.length - 1],
-          approved_status: item.is_certified,
-          file_path: item,
-        };
-        this.certificatesList.push(obj);
-      }
-    });
-    this.StoreObj.profile_video.map((item) => {
-      if (item) {
-        const fileName = item.split("/");
-        const obj = {
-          file_name: fileName[fileName.length - 1],
-          file_path: item,
-        };
-        this.profileAttachementsList.push(obj);
-      }
-    });
+    if (Array.isArray(this.StoreObj.certificates)) {
+      this.StoreObj.certificates.forEach((item) => {
+        if (item) {
+          const fileName = item.split("/");
+          const obj = {
+            file_name: fileName[fileName.length - 1],
+            approved_status: item.is_certified,
+            file_path: item,
+          };
+          this.certificatesList.push(obj);
+        }
+      });
+    }
+    if (Array.isArray(this.StoreObj.profile_video)) {
+      this.StoreObj.profile_video.forEach((item) => {
+        if (item) {
+          const fileName = item.split("/");
+          const obj = {
+            file_name: fileName[fileName.length - 1],
+            file_path: item,
+          };
+          this.profileAttachementsList.push(obj);
+        }
+      });
+    }
   },
 
   methods: {

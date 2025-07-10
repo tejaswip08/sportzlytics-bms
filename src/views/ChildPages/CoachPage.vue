@@ -35,6 +35,7 @@
           rounded
           density="comfortable"
           class="text-capitalize btnColorPrimary ml-2"
+          @click="onboardCoachMethod()"
           >Onboard Coach<v-icon size="small" class="pl-2"
             >mdi-plus</v-icon
           ></v-btn
@@ -198,6 +199,11 @@
       :CoachSettingsDialog="CoachSettingsDialog"
       @clicked="CoachSettingsDialogEmit"
     />
+    <OnboardCoach
+      v-if="onboardCoachDialog"
+      :OnboardCoachDialog="onboardCoachDialog"
+      @clicked="OnboardCoachDialogEmit"
+    />
   </div>
 </template>
 
@@ -207,6 +213,7 @@ import { GetAllAppCoachData } from "@/mixins/GetAppCoachData.js";
 import CoachSettings from "@/components/Coach/Dialogs/CoachSettings.vue";
 import ApproveRejectCoach from "@/components/Coach/Dialogs/ApproveRejectCoach.vue";
 import ActivateDeactivateCoach from "@/components/Coach/Dialogs/ActivateDeactivateCoach.vue";
+import OnboardCoach from "@/components/Coach/Dialogs/OnBoardNewCoach.vue";
 
 import CoachInfo from "@/components/Coach/Cards/CoachInfo.vue";
 export default {
@@ -216,6 +223,7 @@ export default {
     ActivateDeactivateCoach,
     CoachSettings,
     CoachInfo,
+    OnboardCoach,
   },
   data() {
     return {
@@ -274,12 +282,13 @@ export default {
       initialNextToken: null,
       ApproveRejectCoachDialog: false,
       CoachSettingsDialog: false,
-      OnboardCoachDialog: false,
+
       StoreObj: {},
       search: "",
       tableLoading: true,
       showLoader: true,
       coachInfoCard: false,
+      onboardCoachDialog: false,
     };
   },
 
@@ -329,8 +338,8 @@ export default {
       // this.coachInfoCard = true;
     },
 
-    OnboardNewCoachMethod() {
-      this.OnboardCoachDialog = true;
+    onboardCoachMethod() {
+      this.onboardCoachDialog = true;
     },
 
     CoachInfoMethod(item) {
@@ -427,14 +436,6 @@ export default {
       }
     },
 
-    async OnboardCoachDialogEmit(Toggle) {
-      this.OnboardCoachDialog = false;
-      if (Toggle === 2) {
-        this.ApiCallMethod(this.sortCoach, this.initialNextToken, "COACH");
-        // this.sortCoachNamesMethod();
-      }
-    },
-
     async coachInfoCardEmit(Toggle) {
       this.currentView = "MAIN_VIEW";
       if (Toggle === 2) {
@@ -445,6 +446,17 @@ export default {
             "COACH"
           );
         }, 1500);
+      }
+    },
+
+    async OnboardCoachDialogEmit(Toggle) {
+      this.onboardCoachDialog = false;
+      if (Toggle == 2) {
+        await this.ApiCallMethod(
+          this.sortCoach,
+          this.initialNextToken,
+          "COACH"
+        );
       }
     },
   },
