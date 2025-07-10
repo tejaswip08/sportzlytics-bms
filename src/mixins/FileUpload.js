@@ -16,9 +16,7 @@ export const fileUpload = {
           status: "SUCCESS",
           key: result.path,
         };
-      } catch (error) {
-        //
-      }
+      } catch (error) {}
     },
   },
 };
