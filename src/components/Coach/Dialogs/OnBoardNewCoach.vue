@@ -568,6 +568,7 @@ export default {
               Message: response.message,
               color: "text-green",
             };
+            console.log("DEV");
             setTimeout(() => {
               this.OnboardCoachDialogEmit(2);
               this.btnLoader = false;
