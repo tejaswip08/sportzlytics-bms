@@ -199,7 +199,7 @@ export default {
           challengeResponse: this.otpPassword,
         });
         if (otpValidationResult.isSignedIn === true) {
-          this.$store.commit("SET_USER_EMAIL", this.email);
+          // this.$store.commit("SET_USER_EMAIL", this.email);
           this.navigateToLandingPage();
           this.loginLoader = false;
         }

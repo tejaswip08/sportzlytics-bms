@@ -170,6 +170,7 @@ export default {
   },
 
   async mounted() {
+    console.log("LOGGED_IN");
     this.menuList = MenuListJson;
     const userInfo = await getCurrentUserMethod();
     if (userInfo === "/") {
