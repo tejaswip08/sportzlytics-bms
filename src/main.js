@@ -11,9 +11,9 @@ async function initApp() {
   Amplify.configure({
     Auth: {
       Cognito: {
-        identityPoolId: "us-east-1:5d51df7e-d160-43db-bed7-0f636d93fd76",
-        userPoolId: "us-east-1_XHrv2PFvB",
-        userPoolClientId: "3480qig1bcujchnuj3g9shogou",
+        identityPoolId: process.env.VUE_APP_IDENTITY_POOL_ID,
+        userPoolId: process.env.VUE_APP_AWS_COGNITO_USER_POOL_ID,
+        userPoolClientId: process.env.VUE_APP_AWS_USER_POOL_WEB_CLIENT_ID,
         loginWith: {
           email: true,
         },
@@ -22,15 +22,14 @@ async function initApp() {
     },
     Storage: {
       S3: {
-        bucket: "slts-app-users",
-        region: "us-east-1",
+        bucket: process.env.VUE_APP_AWS_BUCKET_NAME,
+        region: process.env.VUE_APP_AWS_PROJECT_REGION,
       },
     },
     API: {
       GraphQL: {
-        endpoint:
-          "https://3aoybc333vbffmquaojhw4aasa.appsync-api.us-east-1.amazonaws.com/graphql",
-        region: "us-east-1",
+        endpoint: process.env.VUE_APP_AWS_GRAPHQL_ENDPOINT,
+        region: process.env.VUE_APP_AWS_PROJECT_REGION,
         defaultAuthMode: "userPool", // userPool = Cognito User Pools
       },
     },
