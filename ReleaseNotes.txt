@@ -1,4 +1,4 @@
-SPORTZLYTICS NEW RELEASE NOTES (v1.0.3)
-10/07/2025
+SPORTZLYTICS NEW RELEASE NOTES (v1.0.5)
+04/08/2025
 
-1) Provided and Implemented OnBoard Coach option through BMS.
+1) Provided and Implemented Coach Settings to update (Max, Min Price and Increment Value)

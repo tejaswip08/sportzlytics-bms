@@ -37,5 +37,18 @@
       "StackId": "arn:aws:cloudformation:us-east-1:058264493142:stack/amplify-sportzlyticsbms3-sportlyy-4434f/5d52b850-2729-11f0-8a64-0affd772fb61",
       "AmplifyAppId": "d2radx2rh3lzuu"
     }
+  },
+  "sportzss": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-sportzlyticsbms3-sportzss-2a263-authRole",
+      "UnauthRoleArn": "arn:aws:iam::058264493142:role/amplify-sportzlyticsbms3-sportzss-2a263-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::058264493142:role/amplify-sportzlyticsbms3-sportzss-2a263-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-sportzlyticsbms3-sportzss-2a263-deployment",
+      "UnauthRoleName": "amplify-sportzlyticsbms3-sportzss-2a263-unauthRole",
+      "StackName": "amplify-sportzlyticsbms3-sportzss-2a263",
+      "StackId": "arn:aws:cloudformation:us-east-1:058264493142:stack/amplify-sportzlyticsbms3-sportzss-2a263/d68559f0-7119-11f0-a9cb-0afff654407d",
+      "AmplifyAppId": "d2radx2rh3lzuu"
+    }
   }
 }

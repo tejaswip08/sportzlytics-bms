@@ -46,3 +46,8 @@ export const listRefundRequests = /* GraphQL */ `
     listRefundRequests
   }
 `;
+export const listPriceRangeForCoach = /* GraphQL */ `
+  query ListPriceRangeForCoach {
+    listPriceRangeForCoach
+  }
+`;

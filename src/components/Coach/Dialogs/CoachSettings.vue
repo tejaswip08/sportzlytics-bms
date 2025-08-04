@@ -71,8 +71,12 @@ import { editPriceSlabForCoach } from "@/graphql/mutations.js";
 import { generateClient } from "aws-amplify/api";
 const client = generateClient();
 
+import { getPriceRangeForCoach } from "@/mixins/GetPriceRangeForCoach.js";
+
 import Snackbar from "@/components/Extras/MySnackbar.vue";
+
 export default {
+  mixins: [getPriceRangeForCoach],
   props: {
     CoachSettingsDialog: Boolean,
   },
@@ -82,8 +86,9 @@ export default {
       maxPrice: "",
       minPrice: "",
       incValue: "",
+      priceRangeObj: {},
       SnackBarComponent: {},
-      // btnLoader: false,
+      btnLoader: false,
     };
   },
 
@@ -95,11 +100,26 @@ export default {
     },
   },
 
+  watch: {
+    CoachSettingsDialog: {
+      immediate: true,
+      async handler(val) {
+        if (val) {
+          console.log("DIALOG_BOX");
+          await this.getPriceRangeForCoachMethod();
+          this.maxPrice = this.priceRangeObj.maximum_price || "0";
+          this.minPrice = this.priceRangeObj.minimum_price || "0";
+          this.incValue = this.priceRangeObj.increment_value || "0";
+        }
+      },
+    },
+  },
+
   methods: {
     async coachSettingsMethod() {
       if (this.$refs.settingForm.validate()) {
         try {
-          // this.btnLoader = true;
+          this.btnLoader = true;
           const result = await client.graphql({
             query: editPriceSlabForCoach,
             variables: {
@@ -110,15 +130,27 @@ export default {
               },
             },
           });
-          // console.log("SETTINGS", result);
+          console.log("SETTINGS", result);
+          const response = JSON.parse(result.data.editPriceSlabForCoach);
+          if (response.status == 200) {
+            this.SnackBarComponent = {
+              SnackbarVModel: true,
+              Message: response.status_message,
+              color: "text-green",
+            };
+            setTimeout(() => {
+              this.CoachSettingsDialogEmit(2);
+              this.btnLoader = false;
+            }, 3000);
+          }
         } catch (error) {
-          console.log("Error", error);
+          // console.log("Error", error);
         }
       } else {
         this.SnackBarComponent = {
           SnackbarVModel: true,
-          Message: response.status_message,
-          color: "text-green",
+          Message: "Kindly provide the details..!",
+          color: "text-red",
         };
       }
     },
