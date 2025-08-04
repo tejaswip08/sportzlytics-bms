@@ -3,7 +3,7 @@ name: 🚀 Build on Push
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
   build:
