@@ -95,8 +95,10 @@ export default {
             Message: response.status_message,
             color: "text-green",
           };
-          this.btnLoader = false;
-          this.ApproveRejectCoachDialogEmit(2);
+          setTimeout(() => {
+            this.btnLoader = false;
+            this.ApproveRejectCoachDialogEmit(2);
+          }, 3000);
         }
       } catch (error) {
         console.log("Error", error);

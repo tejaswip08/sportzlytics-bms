@@ -146,7 +146,7 @@
                 </v-list-item>
                 <v-list-item
                   v-if="item.user_status === 'PENDING_APPROVAL'"
-                  @click.stop="approveRejectRefReqMethod(item, 'REJECT')"
+                  @click.stop="checkItem(item, 'REJECT')"
                 >
                   <v-list-item-title
                     >Reject<v-icon size="15" color="red" class="pl-7 pr-2"
