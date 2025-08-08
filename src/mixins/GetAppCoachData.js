@@ -11,7 +11,7 @@ export const GetAllAppCoachData = {
           variables: {
             input: {
               user_status: sortBy,
-              next_token: nextToken,
+              next_token: nextToken || undefined,
               user_type: user_type,
             },
           },

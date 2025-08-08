@@ -109,7 +109,8 @@
                 :color="
                   item.user_status === 'ACTIVE'
                     ? 'green'
-                    : item.user_status === 'INACTIVE'
+                    : item.user_status === 'INACTIVE' ||
+                      item.user_status === 'REJECTED'
                     ? 'red'
                     : 'blue'
                 "
@@ -119,6 +120,8 @@
                     ? "Active"
                     : item.user_status === "INACTIVE"
                     ? "Inactive"
+                    : item.user_status === "REJECTED"
+                    ? "Rejected"
                     : "Pending"
                 }}</v-chip
               >
@@ -278,6 +281,7 @@ export default {
         { text: "Active", value: "ACTIVE" },
         { text: "Inactive", value: "INACTIVE" },
         { text: "Pending Approval", value: "PENDING_APPROVAL" },
+        { text: "Rejected", value: "REJECTED" },
       ],
       initialNextToken: null,
       ApproveRejectCoachDialog: false,
@@ -298,6 +302,86 @@ export default {
         this.listAllCoaches = [];
         this.tableLoading = true;
         this.ApiCallMethod(this.sortCoach, this.initialNextToken, "COACH");
+        if (val === "REJECTED") {
+          this.headers = [
+            {
+              title: "Name",
+              key: "user_name",
+              sortable: false,
+            },
+            { title: "State", key: "user_state", sortable: false },
+            { title: "Languages Known", key: "languages", sortable: false },
+            // {
+            //   text: "Description",
+            //   value: "profile_description",
+            //   sortable: false,
+            //   width: 300,
+            // },
+            {
+              title: "Sports Expertise",
+              key: "sport_expertize",
+              sortable: false,
+            },
+            {
+              title: "Phone Number",
+              key: "user_phone_number",
+              sortable: false,
+            },
+            { title: "Email", value: "user_email_id", sortable: false },
+            { title: "Created On", key: "user_created_on", sortable: false },
+            // {
+            //   text: "Profile/Certificates",
+            //   value: "user_info",
+            //   sortable: false,
+            // },
+            {
+              title: "No of Analysis Done",
+              key: "no_of_analysis_done",
+              sortable: false,
+            },
+            { title: "Status", key: "status", sortable: false },
+          ];
+        } else {
+          this.headers = [
+            {
+              title: "Name",
+              key: "user_name",
+              sortable: false,
+            },
+            { title: "State", key: "user_state", sortable: false },
+            { title: "Languages Known", key: "languages", sortable: false },
+            // {
+            //   text: "Description",
+            //   value: "profile_description",
+            //   sortable: false,
+            //   width: 300,
+            // },
+            {
+              title: "Sports Expertise",
+              key: "sport_expertize",
+              sortable: false,
+            },
+            {
+              title: "Phone Number",
+              key: "user_phone_number",
+              sortable: false,
+            },
+            { title: "Email", value: "user_email_id", sortable: false },
+            { title: "Created On", key: "user_created_on", sortable: false },
+            // {
+            //   text: "Profile/Certificates",
+            //   value: "user_info",
+            //   sortable: false,
+            // },
+            {
+              title: "No of Analysis Done",
+              key: "no_of_analysis_done",
+              sortable: false,
+            },
+            { title: "Status", key: "status", sortable: false },
+            { title: "Actions", key: "action", sortable: false },
+          ];
+        }
       }
     },
 
