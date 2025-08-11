@@ -1,9 +1,38 @@
 <template>
   <div>
     <v-card elevation="0">
-      <v-toolbar density="comfortable" color="white">
+      <v-toolbar density="comfortable" color="white" class="mt-3 mb-3">
         <v-toolbar-title>
-          <div class="headingFont">Refund Requests</div>
+          <div style="display: flex; flex-direction: row; align-items: center">
+            <div class="mr-3">
+              <div class="headingFont">Requests</div>
+            </div>
+            |
+            <div class="ml-3">
+              <v-btn
+                density="comfortable"
+                class="text-capitalize mr-2"
+                :class="selectedBtn == 'WITHDRAW' ? 'btnColorPrimary' : null"
+                variant="outlined"
+                @click="selectedBtn = 'WITHDRAW'"
+              >
+                Withdrawals
+              </v-btn>
+              <v-btn
+                density="comfortable"
+                class="text-capitalize ml-2"
+                :class="selectedBtn == 'REFUND' ? 'btnColorPrimary' : null"
+                variant="outlined"
+                @click="selectedBtn = 'REFUND'"
+              >
+                Refunds
+              </v-btn>
+            </div>
+          </div>
+
+          <!-- <div class="mb-5 mt-1">
+
+          </div> -->
         </v-toolbar-title>
         <v-spacer />
         <v-text-field
@@ -12,7 +41,7 @@
           variant="outlined"
           rounded
           label="Search"
-          class="textFieldWidth mt-5 mr-2"
+          class="textFieldWidth mt-5 mr-2 customTable tableItemFont"
           color="primary"
         >
           <template #append-inner>
@@ -26,7 +55,7 @@
           :search="search"
           density="compact"
           :headers="headers"
-          :items="listRefundRequestData"
+          :items="selectedBtn == 'WITHDRAW' ? withdrawData : refundData"
           fixed-header
           :height="tableHeight"
           class="customTable tableItemFont"
@@ -53,6 +82,7 @@
               <v-list class="muktaFont tableFontSize">
                 <v-list-item
                   @click="approveRejectRefReqMethod(item, 'APPROVE')"
+                  v-if="item.request_type == 'REFUND_REQUEST'"
                 >
                   <v-list-item-title
                     >Approve<v-icon size="15" color="green" class="pl-7 pr-2"
@@ -62,10 +92,21 @@
                 </v-list-item>
                 <v-list-item
                   @click.stop="approveRejectRefReqMethod(item, 'REJECT')"
+                  v-if="item.request_type == 'REFUND_REQUEST'"
                 >
                   <v-list-item-title
                     >Reject<v-icon size="15" color="red" class="pl-7 pr-2"
                       >mdi-close-circle</v-icon
+                    ></v-list-item-title
+                  >
+                </v-list-item>
+                <v-list-item
+                  @click.stop="approveRejectRefReqMethod(item, 'RESOLVE')"
+                  v-if="item.request_type == 'WITHDRAW'"
+                >
+                  <v-list-item-title
+                    >Resolve<v-icon size="15" color="green" class="pl-7 pr-2"
+                      >mdi-check-circle</v-icon
                     ></v-list-item-title
                   >
                 </v-list-item>
@@ -83,68 +124,95 @@
   </div>
 </template>
 
-<script setup>
-import { ref, reactive, onMounted } from "vue";
-
+<script>
 import { generateClient } from "aws-amplify/api";
 const client = generateClient();
-import { listRefundRequests } from "@/graphql/queries.js";
-
+import { listRequests } from "@/graphql/queries.js";
 import ApproveRejectRefReq from "@/components/RefundRequest/ApproveRejectDialog.vue";
 
-const search = ref("");
-const selectedStatus = ref("");
-const tableHeight = ref(0);
-const listRefundRequestData = ref([]);
-const StoreObj = ref({});
-const headers = reactive([
-  { title: "Sl No", key: "sl_no" },
-  { title: "Coach Name", key: "coach_name" },
-  { title: "User Name", key: "user_name" },
-  { title: "User Phone Number", key: "user_phone_number" },
-  { title: "Request State", key: "request_status" },
-  { title: "Reason For Request", key: "reason_for_request" },
-  { title: "Payment ID", key: "payment_id" },
-  { title: "Requested On", key: "requested_on" },
-  { title: "Action", key: "action" },
-]);
-const statusItems = reactive([
-  { text: "Approved", value: "APPROVED" },
-  { text: "Rejected", value: "REJECTED" },
-]);
-
-const approveRejectDialog = ref(false);
-const tableLoading = ref(true);
-
-onMounted(() => {
-  tableHeight.value = window.innerHeight - 200;
-  callApiMethod();
-});
-
-const callApiMethod = async () => {
-  try {
-    const result = await client.graphql({
-      query: listRefundRequests,
-    });
-    const response = JSON.parse(result.data.listRefundRequests).data;
-    listRefundRequestData.value = response;
-    tableLoading.value = false;
-  } catch (error) {
-    tableLoading.value = false;
-    console.log("Error", error);
-  }
-};
-
-const approveRejectRefReqMethod = (item, action) => {
-  StoreObj.value = item;
-  StoreObj.value.action = action;
-  approveRejectDialog.value = true;
-};
-
-const ApproveRejectDialogEmit = (Toggle) => {
-  approveRejectDialog.value = false;
-  if (Toggle === 2) {
-    callApiMethod();
-  }
+export default {
+  name: "RefundRequestPage",
+  components: {
+    ApproveRejectRefReq,
+  },
+  data() {
+    return {
+      search: "",
+      selectedStatus: "",
+      tableHeight: 0,
+      listRefundRequestData: [],
+      selectedBtn: "WITHDRAW",
+      StoreObj: {},
+      withdrawData: [],
+      refundData: [],
+      headers: [
+        { title: "Sl No", key: "sl_no" },
+        { title: "Coach Name", key: "coach_name" },
+        { title: "User Name", key: "user_name" },
+        { title: "User Phone Number", key: "user_phone_number" },
+        { title: "Request State", key: "request_status" },
+        { title: "Reason For Request", key: "reason_for_request" },
+        { title: "Payment ID", key: "payment_id" },
+        { title: "Requested On", key: "requested_on" },
+        { title: "Action", key: "action" },
+      ],
+      statusItems: [
+        { text: "Approved", value: "APPROVED" },
+        { text: "Rejected", value: "REJECTED" },
+      ],
+      approveRejectDialog: false,
+      tableLoading: true,
+    };
+  },
+  watch: {
+    selectedBtn(val) {
+      this.withdrawData = [];
+      this.refundData = [];
+      if (val === "WITHDRAW") {
+        this.withdrawData = this.listRefundRequestData.filter(
+          (item) => item.request_type === "WITHDRAW"
+        );
+      } else {
+        this.refundData = this.listRefundRequestData.filter(
+          (item) => item.request_type === "REFUND_REQUEST"
+        );
+      }
+    },
+  },
+  async mounted() {
+    this.tableHeight = window.innerHeight - 220;
+    await this.callApiMethod();
+  },
+  methods: {
+    async callApiMethod() {
+      try {
+        this.listRefundRequestData = [];
+        const result = await client.graphql({
+          query: listRequests,
+        });
+        const response = JSON.parse(result.data.listRequests).data;
+        console.log("REQUEST", response);
+        this.listRefundRequestData = response;
+        this.withdrawData = this.listRefundRequestData.filter(
+          (item) => item.request_type === "WITHDRAW"
+        );
+        this.tableLoading = false;
+      } catch (error) {
+        this.tableLoading = false;
+        console.log("Error", error);
+      }
+    },
+    approveRejectRefReqMethod(item, action) {
+      this.StoreObj = { ...item, action };
+      this.approveRejectDialog = true;
+    },
+    async ApproveRejectDialogEmit(Toggle) {
+      this.approveRejectDialog = false;
+      if (Toggle === 2) {
+        await this.callApiMethod();
+        this.selectedBtn = "WITHDRAW";
+      }
+    },
+  },
 };
 </script>

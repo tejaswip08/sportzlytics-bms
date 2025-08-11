@@ -5,9 +5,7 @@
       <v-card elevation="0">
         <v-row class="rowHeight ma-0">
           <v-col cols="12" lg="6" md="6" sm="12" xs="12" class="row1Col1">
-            <div class="loginFont text-white">
-              Welcome to Sportzlytics, Tejaswi
-            </div>
+            <div class="loginFont text-white">Welcome to Sportzlytics</div>
             <div>
               <v-img src="@/assets/FinalLogo.png" :width="350" />
             </div>

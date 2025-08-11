@@ -93,3 +93,23 @@ export const editSponsoredVideos = /* GraphQL */ `
     editSponsoredVideos(input: $input)
   }
 `;
+export const editBmsSettings = /* GraphQL */ `
+  mutation EditBmsSettings($input: editBmsSettingsInput) {
+    editBmsSettings(input: $input)
+  }
+`;
+export const settleWithdrawalRequest = /* GraphQL */ `
+  mutation SettleWithdrawalRequest($input: settleWithdrawalRequestInput) {
+    settleWithdrawalRequest(input: $input)
+  }
+`;
+export const manageRefundRequest = /* GraphQL */ `
+  mutation ManageRefundRequest($input: manageRefundRequestInput) {
+    manageRefundRequest(input: $input)
+  }
+`;
+export const settleCoachPayment = /* GraphQL */ `
+  mutation SettleCoachPayment($input: settleCoachPaymentInput) {
+    settleCoachPayment(input: $input)
+  }
+`;

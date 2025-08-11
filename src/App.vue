@@ -43,8 +43,9 @@ export default {
 }
 
 .customTable th {
-  font-size: 13px !important;
+  font-size: 15px !important;
   font-weight: bold !important;
+  /* color: #0981c5; */
 }
 
 .tableItemFont {

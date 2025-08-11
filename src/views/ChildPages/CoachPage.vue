@@ -41,13 +41,13 @@
             >mdi-plus</v-icon
           ></v-btn
         >
-        <v-btn
+        <!-- <v-btn
           rounded
           density="comfortable"
           class="text-capitalize btnColorPrimary ml-2"
           @click="coachSettingsMethod()"
           >Settings<v-icon size="small" class="pl-2">mdi-cog</v-icon></v-btn
-        >
+        > -->
       </v-toolbar>
       <v-card-text>
         <v-data-table
@@ -59,6 +59,7 @@
           fixed-header
           :height="tableHeight"
           @click:row="handleRowClick"
+          class="customTable tableItemFont"
         >
           <template v-slot:[`item.sport_expertize`]="{ item }">
             <div class="text-capitalize">
@@ -126,6 +127,32 @@
                     : "Pending"
                 }}</v-chip
               >
+            </div>
+          </template>
+          <template v-slot:[`item.wallet_balance`]="{ item }">
+            <div style="display: flex; align-items: center">
+              <div>
+                {{ item.wallet_balance == 0 ? "-" : `₹${item.wallet_balance}` }}
+              </div>
+              <div class="ml-2" style="position: relative; bottom: 2px">
+                <v-tooltip
+                  :text="`Settle up for (${item.user_name})`"
+                  location="bottom"
+                >
+                  <template v-slot:activator="{ props }">
+                    <v-btn
+                      v-bind="props"
+                      icon
+                      flat
+                      @click.stop="settleUpCoachPaymentMethod(item)"
+                      density="compact"
+                      ><v-icon color="primary" size="small"
+                        >mdi-credit-card-outline</v-icon
+                      ></v-btn
+                    >
+                  </template>
+                </v-tooltip>
+              </div>
             </div>
           </template>
           <template v-slot:[`item.action`]="{ item }">
@@ -208,6 +235,12 @@
       :OnboardCoachDialog="onboardCoachDialog"
       @clicked="OnboardCoachDialogEmit"
     />
+    <SettleCoachPayment
+      v-if="settleUpCoachPaymentDialog"
+      :SettleUpCoachPaymentDialog="settleUpCoachPaymentDialog"
+      :StoreObj="StoreObj"
+      @clicked="settleUpCoachPaymentDialogEmit"
+    />
   </div>
 </template>
 
@@ -218,6 +251,7 @@ import CoachSettings from "@/components/Coach/Dialogs/CoachSettings.vue";
 import ApproveRejectCoach from "@/components/Coach/Dialogs/ApproveRejectCoach.vue";
 import ActivateDeactivateCoach from "@/components/Coach/Dialogs/ActivateDeactivateCoach.vue";
 import OnboardCoach from "@/components/Coach/Dialogs/OnBoardNewCoach.vue";
+import SettleCoachPayment from "@/components/Coach/Dialogs/SettleCoachPayment.vue";
 
 import CoachInfo from "@/components/Coach/Cards/CoachInfo.vue";
 export default {
@@ -228,6 +262,7 @@ export default {
     CoachSettings,
     CoachInfo,
     OnboardCoach,
+    SettleCoachPayment,
   },
   data() {
     return {
@@ -270,6 +305,7 @@ export default {
           sortable: false,
         },
         { title: "Status", key: "status", sortable: false },
+        // { title: "Wallet Balance", key: "wallet_balance", sortable: false },
         { title: "Actions", key: "action", sortable: false },
       ],
       ViewCoachProfileDialog: false,
@@ -283,6 +319,7 @@ export default {
         { text: "Inactive", value: "INACTIVE" },
         { text: "Pending Approval", value: "PENDING_APPROVAL" },
         { text: "Rejected", value: "REJECTED" },
+        { text: "Settle Payments", value: "WALLET_BALANCE" },
       ],
       initialNextToken: null,
       ApproveRejectCoachDialog: false,
@@ -294,15 +331,18 @@ export default {
       showLoader: true,
       coachInfoCard: false,
       onboardCoachDialog: false,
+      settleUpCoachPaymentDialog: false,
     };
   },
 
   watch: {
-    sortCoach(val) {
+    async sortCoach(val) {
       if (val) {
         this.listAllCoaches = [];
         this.tableLoading = true;
-        this.ApiCallMethod(this.sortCoach, this.initialNextToken, "COACH");
+        const customVal =
+          val == "ACTIVE" || val == "WALLET_BALANCE" ? "ACTIVE" : val;
+        await this.ApiCallMethod(customVal, this.initialNextToken, "COACH");
         if (val === "REJECTED") {
           this.headers = [
             {
@@ -312,12 +352,7 @@ export default {
             },
             { title: "State", key: "user_state", sortable: false },
             { title: "Languages Known", key: "languages", sortable: false },
-            // {
-            //   text: "Description",
-            //   value: "profile_description",
-            //   sortable: false,
-            //   width: 300,
-            // },
+
             {
               title: "Sports Expertise",
               key: "sport_expertize",
@@ -330,11 +365,7 @@ export default {
             },
             { title: "Email", value: "user_email_id", sortable: false },
             { title: "Created On", key: "user_created_on", sortable: false },
-            // {
-            //   text: "Profile/Certificates",
-            //   value: "user_info",
-            //   sortable: false,
-            // },
+
             {
               title: "No of Analysis Done",
               key: "no_of_analysis_done",
@@ -342,6 +373,40 @@ export default {
             },
             { title: "Status", key: "status", sortable: false },
           ];
+        } else if (val === "WALLET_BALANCE") {
+          this.headers = [
+            {
+              title: "Name",
+              key: "user_name",
+              sortable: false,
+            },
+            { title: "State", key: "user_state", sortable: false },
+            { title: "Languages Known", key: "languages", sortable: false },
+
+            {
+              title: "Sports Expertise",
+              key: "sport_expertize",
+              sortable: false,
+            },
+            {
+              title: "Phone Number",
+              key: "user_phone_number",
+              sortable: false,
+            },
+            { title: "Email", value: "user_email_id", sortable: false },
+            { title: "Created On", key: "user_created_on", sortable: false },
+
+            {
+              title: "No of Analysis Done",
+              key: "no_of_analysis_done",
+              sortable: false,
+            },
+            { title: "Status", key: "status", sortable: false },
+            { title: "Wallet Balance", key: "wallet_balance", sortable: false },
+          ];
+          this.listAllCoaches = this.listAllCoaches.filter(
+            (item) => item.wallet_balance > 0
+          );
         } else {
           this.headers = [
             {
@@ -493,6 +558,11 @@ export default {
       }
     },
 
+    settleUpCoachPaymentMethod(item) {
+      this.StoreObj = item;
+      this.settleUpCoachPaymentDialog = true;
+    },
+
     ViewCoachProfileDialogEmit(Toggle) {
       this.ViewCoachProfileDialog = false;
     },
@@ -537,6 +607,18 @@ export default {
     async OnboardCoachDialogEmit(Toggle) {
       this.onboardCoachDialog = false;
       if (Toggle == 2) {
+        await this.ApiCallMethod(
+          this.sortCoach,
+          this.initialNextToken,
+          "COACH"
+        );
+      }
+    },
+
+    async settleUpCoachPaymentDialogEmit(Toggle) {
+      this.settleUpCoachPaymentDialog = false;
+      if (Toggle == 2) {
+        this.sortCoach = "ACTIVE";
         await this.ApiCallMethod(
           this.sortCoach,
           this.initialNextToken,

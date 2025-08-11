@@ -30,8 +30,8 @@
     "MenuIcon": "mdi-star-circle"
   },
   {
-    "MenuName": "Refund Requests",
-    "MenuRoute": "/refund-requests",
+    "MenuName": "Requests",
+    "MenuRoute": "/requests",
     "MenuIcon": "mdi-cash"
   },
   {
@@ -43,5 +43,10 @@
     "MenuName": "App Guide",
     "MenuRoute": "/appguide",
     "MenuIcon": "mdi-notebook"
+  },
+  {
+    "MenuName": "Settings",
+    "MenuRoute": "/settings",
+    "MenuIcon": "mdi-cog"
   }
 ]

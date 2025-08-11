@@ -46,6 +46,7 @@
           :items="listAppUsers"
           fixed-header
           :height="tableHeight"
+          class="customTable tableItemFont"
         >
           <template v-slot:[`item.user_name`]="{ item }">
             <div>

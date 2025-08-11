@@ -8,6 +8,8 @@
             {{
               StoreObj.action === "APPROVE"
                 ? "Approve Refund Request"
+                : StoreObj.action === "RESOLVE"
+                ? "Resolve Withdraw Request"
                 : "Reject Refund Request"
             }}
           </v-toolbar-title>
@@ -17,11 +19,27 @@
           >
         </v-toolbar>
         <v-card-text class="pa-5 muktaFont">
-          <div class="tableFontSize">
+          <div class="tableFontSize" v-if="StoreObj.action !== 'REJECT'">
             Are you sure want to
-            {{ StoreObj.action === "APPROVE" ? "approve" : "reject" }}
+            {{
+              StoreObj.action === "APPROVE"
+                ? "approve"
+                : StoreObj.action === "RESOLVE"
+                ? "resolve"
+                : "reject"
+            }}
             <strong>{{ StoreObj.analysis_id }}</strong
             >?
+          </div>
+          <div v-else>
+            <v-text-field
+              v-model="rejectionReason"
+              density="compact"
+              rounded
+              variant="outlined"
+              color="primary muktaFont"
+              label="Reason for rejection"
+            />
           </div>
         </v-card-text>
         <v-card-actions>
@@ -33,9 +51,17 @@
             class="text-capitalize btnColorPrimary"
             @click="approveRejectRefReqMethod()"
           >
-            {{ StoreObj.action === "APPROVE" ? "Approve" : "Reject" }}
+            {{
+              StoreObj.action === "APPROVE"
+                ? "Approve"
+                : StoreObj.action === "RESOLVE"
+                ? "Resolve"
+                : "Reject"
+            }}
             <v-icon small class="pl-2">{{
-              StoreObj.action === "APPROVE" ? "mdi-check" : "mdi-close"
+              StoreObj.action === "APPROVE" || "RESOLVE"
+                ? "mdi-check"
+                : "mdi-close"
             }}</v-icon>
           </v-btn>
         </v-card-actions>
@@ -46,7 +72,10 @@
 
 <script>
 import Snackbar from "@/components/Extras/MySnackbar.vue";
-import { approveOrRejectRefund } from "@/graphql/mutations.js";
+import {
+  settleWithdrawalRequest,
+  manageRefundRequest,
+} from "@/graphql/mutations.js";
 import { generateClient } from "aws-amplify/api";
 const client = generateClient();
 
@@ -58,6 +87,7 @@ export default {
   components: { Snackbar },
   data() {
     return {
+      rejectionReason: "",
       SnackBarComponent: {},
       btnLoader: false,
     };
@@ -75,24 +105,41 @@ export default {
     async approveRejectRefReqMethod() {
       try {
         this.btnLoader = true;
+        const mutationName =
+          this.StoreObj.action == "RESOLVE"
+            ? settleWithdrawalRequest
+            : manageRefundRequest;
+        const mutationNameString =
+          this.StoreObj.action == "RESOLVE"
+            ? "settleWithdrawalRequest"
+            : "manageRefundRequest";
         const result = await client.graphql({
-          query: approveOrRejectRefund,
+          query: mutationName,
           variables: {
             input: {
               request_id: this.StoreObj.request_id,
-              action: this.StoreObj.action,
+              rejection_reason:
+                this.StoreObj.action == "REJECT"
+                  ? this.rejectionReason || undefined
+                  : undefined,
+              action:
+                this.StoreObj.action == "RESOLVE"
+                  ? undefined
+                  : this.StoreObj.action,
             },
           },
         });
-        const response = JSON.parse(result.data.approveOrRejectRefund);
+        const response = JSON.parse(result.data[mutationNameString]);
         if (response.status === 200) {
           this.SnackBarComponent = {
             SnackbarVModel: true,
             Message: response.status_message,
             color: "text-green",
           };
-          this.btnLoader = false;
-          this.ApproveRejectDialogEmit(2);
+          setTimeout(() => {
+            this.ApproveRejectDialogEmit(2);
+            this.btnLoader = false;
+          }, 3000);
         } else if (response.status === 500) {
           this.SnackBarComponent = {
             SnackbarVModel: true,
@@ -100,10 +147,14 @@ export default {
             color: "text-red",
           };
           this.btnLoader = false;
-          this.ApproveRejectDialogEmit(2);
         }
       } catch (error) {
         this.btnLoader = false;
+        this.SnackBarComponent = {
+          SnackbarVModel: true,
+          Message: error.errors[0].message,
+          color: "text-red",
+        };
         console.log("Error", error);
       }
     },

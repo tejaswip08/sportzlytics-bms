@@ -27,8 +27,8 @@ const routes = [
         component: () => import("@/views/ChildPages/CabinetPage.vue"),
       },
       {
-        name: "Refund Requests",
-        path: "/refund-requests",
+        name: "Requests",
+        path: "/requests",
         component: () => import("@/views/ChildPages/RefundRequests.vue"),
       },
       {
@@ -55,6 +55,11 @@ const routes = [
         path: "/featured-ads",
         name: "Featured",
         component: () => import("@/views/ChildPages/FeaturedAds.vue"),
+      },
+      {
+        path: "/settings",
+        name: "Settings",
+        component: () => import("@/views/ChildPages/Settings.vue"),
       },
     ],
   },

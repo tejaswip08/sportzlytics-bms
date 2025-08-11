@@ -51,3 +51,13 @@ export const listPriceRangeForCoach = /* GraphQL */ `
     listPriceRangeForCoach
   }
 `;
+export const listBmsSettings = /* GraphQL */ `
+  query ListBmsSettings {
+    listBmsSettings
+  }
+`;
+export const listRequests = /* GraphQL */ `
+  query ListRequests {
+    listRequests
+  }
+`;
