@@ -1,4 +1,12 @@
-SPORTZLYTICS NEW RELEASE NOTES (v1.0.5)
-04/08/2025
+SPORTZLYTICS NEW RELEASE NOTES (v1.0.7)
+11/08/2025
 
-1) Provided and Implemented Coach Settings to update (Max, Min Price and Increment Value)
+1) Introduced Settings Tab
+    a) Includes both (Coach Settings & Platform Fee)
+
+2) Added Wallet Balance column in the coach data table under (Settle Payment) status where admin can 
+   settle up the payments.
+
+3) The Refund Requests renamed as Requests under this two sub tabs are provided
+    a) Withdrawals
+    b) Refunds
