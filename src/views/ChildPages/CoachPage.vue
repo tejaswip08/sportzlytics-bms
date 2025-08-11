@@ -317,7 +317,7 @@ export default {
       sortCoachItems: [
         { text: "Active", value: "ACTIVE" },
         { text: "Inactive", value: "INACTIVE" },
-        { text: "Pending Approval", value: "PENDING_APPROVAL" },
+        { text: "Pending Approvals", value: "PENDING_APPROVAL" },
         { text: "Rejected", value: "REJECTED" },
         { text: "Settle Payments", value: "WALLET_BALANCE" },
       ],
